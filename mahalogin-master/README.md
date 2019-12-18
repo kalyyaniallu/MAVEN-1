@@ -10,6 +10,7 @@ web hooks call jenkins
 # mahalogin
 
 test
+echo "this is my world"
 
 one
 two
