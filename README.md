@@ -7,3 +7,4 @@ x=100
 echo $x
 hai
 hello
+h r u
