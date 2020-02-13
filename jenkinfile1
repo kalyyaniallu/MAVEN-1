@@ -1,0 +1,32 @@
+Groovy Code:
+
+node
+{
+    stage('Clone repository')
+    {
+        git 'https://github.com/gowtham551/MAVEN.git'
+    }
+    stage('Build mvn')
+    {
+        sh label: '', script: 'mvn clean install'
+    }
+    stage('Build image')
+    {
+        sh label: '', script: 'docker build -t gowtham551/javaapp:5 .'
+    }
+    stage('docker hub login')
+    {
+        withCredentials([string(credentialsId: '16050658-5f62-4aad-bbe6-03e0bc428503', variable: 'passwd')])
+        {
+            sh label: '', script: 'docker login -u gowtham551 -p ${passwd}'
+        }
+    }
+    stage('push image')
+    {
+        sh label: '', script: 'docker push gowtham551/javaapp:5'
+    }
+    stage('Create Container')
+    {
+        sh label: '', script: 'docker run --name t5 -d -p 8085:8080 gowtham551/javaapp:5'
+    }
+}
