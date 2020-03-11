@@ -1,0 +1,36 @@
+node 
+{
+   stage('git clone') 
+   {
+       git 'https://github.com/gowtham551/MAVEN.git'
+   }
+   
+   stage('build mvn')
+   {
+      sh label: '', script: 'mvn clean install'
+   }
+   stage('Create image')
+   {
+      sh label: '', script: 'docker build -t gowtham551/t1:1 .'
+   }
+   stage('Delete containers')
+   {
+      sh label: '', script: 'docker rm -f $(docker ps -aq)'
+   }
+   stage('Create container')
+   {
+      sh label: '', script: 'docker run --name t1 -d -p 8081:8080 gowtham551/t1:1'
+   }
+   stage('docker login')
+   {
+       
+      withCredentials([string(credentialsId: 'password', variable: 'password')]) {
+    // some block
+    sh label: '', script: 'docker login -u gowtham551 -p $password'
+   }
+   stage('push image into docker hub')
+   {
+      sh label: '', script: 'docker push gowtham551/t1:1'
+   }
+}
+}
